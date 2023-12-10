@@ -1,11 +1,11 @@
 #pragma once
 
-#include "window.h"
+#include "display/window.h"
 #include "app_state.h"
 #include "dll.h"
-#include "graphics.h"
+#include "gfx/graphics.h"
 #include "conductor.h"
-#include "gui.h"
+#include "gui/gui.h"
 
 namespace Core {
 
@@ -15,7 +15,9 @@ namespace Core {
 		void Init(HINSTANCE hInstance, std::shared_ptr<AppState> bootstrappingState);
 		void Run();
 
-		void PushAppState(std::shared_ptr<AppState> appState);
+		Graphics& GetGraphics();
+
+		void PushAndInitAppState(std::shared_ptr<AppState> appState);
 
 		static EmbersEngine& GetInstance() {
 			static EmbersEngine instance;
@@ -54,5 +56,10 @@ namespace Core {
 	inline EmbersEngine& Engine() {
 		return EmbersEngine::GetInstance();
 	}
+
+	inline Graphics& Gfx() {
+		return Engine().GetGraphics();
+	}
+
 
 }

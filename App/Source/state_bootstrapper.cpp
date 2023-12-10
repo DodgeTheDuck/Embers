@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "state_bootstrapper.h"
 #include "state_engine_dev.h"
-#include "Core/engine.h"
+#include "Core/engine/engine.h"
 
 enum DevMode
 {
@@ -17,7 +17,7 @@ void StateBootsrapper::Init()
 		{DevMode::EngineDev, std::make_shared<StateEngineDev>()}
 	};
 	 
-	Core::Engine().PushAppState(devTests[devModeToRun]);
+	Core::Engine().PushAndInitAppState(devTests[devModeToRun]);
 
 }
 

@@ -3,7 +3,28 @@
 
 namespace Core {
 
-	void Graphics::InitDisplay(HINSTANCE hInstance, HWND hwnd)
+	void Graphics::Init(HINSTANCE hInstance, HWND hwnd)
+	{
+		_InitDisplay(hInstance, hwnd);
+		_InitGraphics();
+	}
+
+	void Graphics::BeginFrame() {
+		_pipeline->BeginFrame();
+	}
+
+	void Graphics::EndFrame() {
+		_pipeline->EndFrame();
+		SwapBuffers(_dc);
+	}
+
+	void Graphics::SetPipeline(std::shared_ptr<GraphicsPipeline> pipeline)
+	{
+		_pipeline = pipeline;
+		_pipeline->Init();
+	}
+
+	void Graphics::_InitDisplay(HINSTANCE hInstance, HWND hwnd)
 	{
 
 		PIXELFORMATDESCRIPTOR pfdFake =
@@ -102,26 +123,10 @@ namespace Core {
 
 	}
 
-	void Graphics::InitGraphics()
+	void Graphics::_InitGraphics()
 	{
-		//TODO: explode this out in to something more configurable
 		wglSwapIntervalEXT(0);
-		glViewport(0, 0, 1024, 768);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDisable(GL_CULL_FACE);
-		glEnable(GL_DEPTH_TEST);
-		glClearColor(0, 0, 0, 1);
-	}
-
-	void Graphics::Clear() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
-
-	void Graphics::Swap() {
-		SwapBuffers(_dc);
-	}
-
+	}	
 
 	HWND Graphics::_CreateFakeWindow(HINSTANCE hInstance) {
 

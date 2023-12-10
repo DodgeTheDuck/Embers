@@ -12,14 +12,13 @@ namespace Core {
 		_window.Show();
 
 		// setup gfx
-		_graphics.InitDisplay(hInstance, _window.GetHwnd());
-		_graphics.InitGraphics();
+		_graphics.Init(hInstance, _window.GetHwnd());
 
 		// setup gui
 		_gui.Init(_window.GetHwnd());
 
 		// add and initiate the client state
-		PushAppState(bootstrappingState);
+		PushAndInitAppState(bootstrappingState);
 		bootstrappingState->Init();
 
 		// init conductor last to start timing as close to main loop as possible
@@ -39,8 +38,14 @@ namespace Core {
 		}
 	}
 
-	void EmbersEngine::PushAppState(std::shared_ptr<AppState> appState) {
+	Graphics& EmbersEngine::GetGraphics()
+	{
+		return _graphics;
+	}
+
+	void EmbersEngine::PushAndInitAppState(std::shared_ptr<AppState> appState) {
 		_appStates.push(appState);
+		appState->Init();
 	}
 
 	void EmbersEngine::_Tick(double dt)
@@ -51,15 +56,15 @@ namespace Core {
 	void EmbersEngine::_Render(double dt)
 	{
 
-		_appStates.front()->Render();
+		_graphics.BeginFrame();
 
-		_graphics.Clear();
+		_appStates.front()->Render();
 
 		_gui.Begin();
 		_conductor.Gui();
 		_gui.End();
 
-		_graphics.Swap();
+		_graphics.EndFrame();
 
 	}
 
