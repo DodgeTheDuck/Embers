@@ -1,7 +1,8 @@
 #pragma once
 
-#include "dll.h"
-#include "graphics_pipeline.h"
+#include <dll.h>
+#include <core/gfx/graphics_pipeline.h>
+#include <core/geometry/mesh.h>
 
 namespace Core {
 
@@ -9,9 +10,11 @@ namespace Core {
 
 	public:
 		void Init(HINSTANCE hInstance, HWND hwnd);
-		void SetPipeline(std::shared_ptr<GraphicsPipeline> pipeline);
+		void SetPipeline(Ref<GraphicsPipeline> pipeline);
+		Ref<GraphicsPipeline> GetPipeline();
 
 		void BeginFrame();
+		void RenderMesh(Mesh mesh);
 		void EndFrame();
 
 	private:
@@ -20,10 +23,10 @@ namespace Core {
 		HWND _CreateFakeWindow(HINSTANCE hInstance);
 
 		// display
-		HDC _dc;
+		HDC _dc{};
 
 		// gfx
-		std::shared_ptr<GraphicsPipeline> _pipeline;
+		Ref<GraphicsPipeline> _pipeline;
 
 
 	};

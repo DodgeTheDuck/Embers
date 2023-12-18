@@ -10,8 +10,11 @@ namespace Core {
 
 	void GraphicsPipelineForwardBasic::Init()
 	{
-		_state = std::make_unique<GraphicsStateDepthBasic>();
+		_state = CreateRef<GraphicsStateDepthBasic>();
 		_state->Init();
+
+		_stages.push_back(Core::GraphicsPipelinePass());
+
 	}
 
 	void GraphicsPipelineForwardBasic::BeginFrame()
@@ -23,7 +26,7 @@ namespace Core {
 	void GraphicsPipelineForwardBasic::EndFrame()
 	{
 		_state->EndFrame();
-	}
+	}	
 
 	GraphicsPipelineForwardBasic::~GraphicsPipelineForwardBasic() {
 

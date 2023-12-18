@@ -1,2 +1,2 @@
-#include "stdafx.h"
-#include "vertex.h"
+#include <stdafx.h>
+#include <core/geometry/vertex.h>

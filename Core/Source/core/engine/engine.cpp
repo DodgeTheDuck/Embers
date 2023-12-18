@@ -1,10 +1,15 @@
-
-#include "stdafx.h"
-#include "engine.h"
+#include <stdafx.h>
+#include <core/engine/engine.h>
+#include <core/geometry/primitive.h>
+#include <core/geometry/mesh.h>
+#include <core/asset/asset_shader.h>
+#include <core/asset/asset_mesh.h>
+#include <core/ecs/system/model_system.h>
+#include <core/ecs/system/camera_system.h>
 
 namespace Core {
 	
-	void EmbersEngine::Init(HINSTANCE hInstance, std::shared_ptr<AppState> bootstrappingState) {
+	void EmbersEngine::Init(HINSTANCE hInstance, Ref<AppState> bootstrappingState) {
 
 		// setup window
 		_window = Window();
@@ -12,14 +17,34 @@ namespace Core {
 		_window.Show();
 
 		// setup gfx
-		_graphics.Init(hInstance, _window.GetHwnd());
+		_graphics = CreateRef<Graphics>();
+		_graphics->Init(hInstance, _window.GetHwnd());
 
 		// setup gui
-		_gui.Init(_window.GetHwnd());
+		_gui = CreateRef<Gui>();
+		_gui->Init(_window.GetHwnd());
+
+		// setup input
+		_keyboard = CreateRef<Input::Keyboard>();
+
+		// setup assets
+		_assetManager = CreateRef<AssetManager>();
+		
+		_assetManager->AddAsset<AssetShader>("shader_particle", std::make_shared<AssetShader>("particle.vert", "particle.frag"));
+		_assetManager->AddAsset<AssetMesh>("mesh_rect", CreateRef<AssetMesh>(
+			(Primitive&)Rectangle::Make(1.0f, 1.0f, glm::vec3(1.0f))
+		));
+
+		// TEMP
+		_assetManager->GetAsset<AssetShader>("shader_particle")->Use();
+
+		// ecs
+		_registry = CreateRef<entt::registry>();
+		_systems.push_back(std::make_shared<System::Model>());
+		_systems.push_back(std::make_shared<System::Camera>());
 
 		// add and initiate the client state
 		PushAndInitAppState(bootstrappingState);
-		bootstrappingState->Init();
 
 		// init conductor last to start timing as close to main loop as possible
 		_conductor.Init();
@@ -38,9 +63,23 @@ namespace Core {
 		}
 	}
 
-	Graphics& EmbersEngine::GetGraphics()
+	Ref<Graphics> EmbersEngine::GetGraphics()
 	{
 		return _graphics;
+	}
+
+	Ref<Input::Keyboard> EmbersEngine::GetKeyboard()
+	{
+		return _keyboard;
+	}
+
+	Ref<AssetManager> EmbersEngine::GetAssetManager()
+	{
+		return _assetManager;
+	}
+	
+	Ref<entt::registry> EmbersEngine::GetRegistry() {
+		return _registry;
 	}
 
 	void EmbersEngine::PushAndInitAppState(std::shared_ptr<AppState> appState) {
@@ -51,20 +90,50 @@ namespace Core {
 	void EmbersEngine::_Tick(double dt)
 	{
 		_appStates.front()->Tick();
+
+		for (auto& system : _systems) {
+			system->Tick(_registry, dt);
+		}
+
 	}
 
 	void EmbersEngine::_Render(double dt)
 	{
 
-		_graphics.BeginFrame();
+		_graphics->BeginFrame();
+
+		for (auto& system : _systems) {
+			system->PreRender(_registry, dt);
+		}
 
 		_appStates.front()->Render();
 
-		_gui.Begin();
-		_conductor.Gui();
-		_gui.End();
+		auto gfxPipeline = _graphics->GetPipeline();
 
-		_graphics.EndFrame();
+		while (gfxPipeline->Process()) {
+			
+			auto passIndex = gfxPipeline->ActivePass();
+
+			gfxPipeline->BeginPass();
+						
+			for (auto& system : _systems) {
+				system->RenderPass(_registry, dt, passIndex);
+			}
+			
+			gfxPipeline->EndPass();			
+			gfxPipeline->NextPass();
+
+		}
+
+		_gui->Begin();
+		_conductor.Gui();
+		_gui->End();
+
+		for (auto& system : _systems) {
+			system->PostRender(_registry, dt);
+		}
+
+		_graphics->EndFrame();
 
 	}
 

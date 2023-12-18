@@ -22,4 +22,14 @@ namespace Core {
 	{
 	}
 
+	void GraphicsStateDepthBasic::BeginPass(uint32_t passIndex)
+	{
+
+	}
+
+	void GraphicsStateDepthBasic::EndPass(uint32_t passIndex)
+	{
+
+	}
+
 }

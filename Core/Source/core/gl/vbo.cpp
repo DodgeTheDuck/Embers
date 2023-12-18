@@ -10,7 +10,7 @@ namespace Core {
 		glGenBuffers(1, &_vbo);
 	}
 
-	void Vbo::BufferData(const void* data, const uint32_t nElements, const size_t elementSize) {
+	void Vbo::BufferData(const void* data, const size_t nElements, const size_t elementSize) {
 		if (_vbo == 0) {
 			Error::Exit(L"Trying to add data to invalid buffer");
 		}

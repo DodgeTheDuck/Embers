@@ -6,7 +6,7 @@ namespace Core {
 
 	public:
 		void GenerateBuffer();
-		void BufferData(const void* data, const uint32_t nElements, const size_t elementSize);
+		void BufferData(const void* data, const size_t nElements, const size_t elementSize);
 		void Bind();
 		void Unbind();
 

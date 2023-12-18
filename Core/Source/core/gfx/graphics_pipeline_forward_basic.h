@@ -12,6 +12,7 @@ namespace Core {
 		~GraphicsPipelineForwardBasic();
 
 		void Init() override;
+
 		void BeginFrame() override;
 		void EndFrame() override;
 

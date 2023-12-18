@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "conductor.h"
+#include <stdafx.h>
+#include <core/engine/conductor.h>
 
 namespace Core {
 

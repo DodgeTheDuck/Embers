@@ -1,7 +1,7 @@
 
-#include "stdafx.h"
-#include "window.h"
-#include "engine/engine.h"
+#include <stdafx.h>
+#include <core/display/window.h>
+#include <core/engine/engine.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -90,10 +90,10 @@ namespace Core {
 		switch (msg)
 		{
 		case WM_KEYDOWN:
-			//GEngine().Keyboard()->SetKeyDown(wParam);
+			Keyboard()->SetKeyDown(wParam);
 			break;
 		case WM_KEYUP:
-			//GEngine().Keyboard()->SetKeyUp(wParam);
+			Keyboard()->SetKeyUp(wParam);
 			break;
 		case WM_CLOSE:
 			DestroyWindow(hWnd);

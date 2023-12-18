@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "graphics.h"
+#include <stdafx.h>
+#include <core/gfx/graphics.h>
 
 namespace Core {
 
@@ -13,15 +13,26 @@ namespace Core {
 		_pipeline->BeginFrame();
 	}
 
+	void Graphics::RenderMesh(Mesh mesh)
+	{
+		mesh.Bind();
+		glDrawElements(GL_TRIANGLES, mesh.IndexCount(), GL_UNSIGNED_INT, (void*)0);
+	}
+
 	void Graphics::EndFrame() {
 		_pipeline->EndFrame();
 		SwapBuffers(_dc);
 	}
 
-	void Graphics::SetPipeline(std::shared_ptr<GraphicsPipeline> pipeline)
+	void Graphics::SetPipeline(Ref<GraphicsPipeline> pipeline)
 	{
 		_pipeline = pipeline;
 		_pipeline->Init();
+	}
+
+	Ref<GraphicsPipeline> Graphics::GetPipeline()
+	{
+		return _pipeline;
 	}
 
 	void Graphics::_InitDisplay(HINSTANCE hInstance, HWND hwnd)

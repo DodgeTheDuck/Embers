@@ -1,9 +1,33 @@
-#include "stdafx.h"
-#include "mesh.h"
+#include <stdafx.h>
+#include <core/geometry/mesh.h>
 
 namespace Core {
 
-	void Mesh::FromIndices(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
+	Mesh::Mesh()
+	{
+	}
+
+	Mesh::Mesh(Primitive& primitive)
+	{
+		_Make(primitive.GetVertices(), primitive.GetIndices());
+	}
+
+	void Mesh::Bind()
+	{
+		_vao.Bind();
+	}
+
+	uint32_t Mesh::VertCount()
+	{
+		return _nVerts;
+	}
+
+	uint32_t Mesh::IndexCount()
+	{
+		return _nIndices;
+	}
+
+	void Mesh::_Make(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
 	{
 
 		_vao.GenerateBuffer();
@@ -22,6 +46,9 @@ namespace Core {
 		_vao.Unbind();
 		_vbo.Unbind();
 		_ebo.Unbind();
+
+		_nVerts = vertices.size();
+		_nIndices = indices.size();
 
 	}
 
