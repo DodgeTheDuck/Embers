@@ -17,6 +17,21 @@ namespace Core {
 		_vao.Bind();
 	}
 
+	Vao Mesh::GetVao()
+	{
+		return _vao;
+	}
+
+	Vbo Mesh::GetVbo()
+	{
+		return _vbo;
+	}
+
+	Ebo Mesh::GetEbo()
+	{
+		return _ebo;
+	}
+
 	uint32_t Mesh::VertCount()
 	{
 		return _nVerts;

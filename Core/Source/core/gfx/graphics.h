@@ -3,6 +3,7 @@
 #include <dll.h>
 #include <core/gfx/graphics_pipeline.h>
 #include <core/geometry/mesh.h>
+#include "mesh_batch.h"
 
 namespace Core {
 
@@ -12,6 +13,11 @@ namespace Core {
 		void Init(HINSTANCE hInstance, HWND hwnd);
 		void SetPipeline(Ref<GraphicsPipeline> pipeline);
 		Ref<GraphicsPipeline> GetPipeline();
+
+		uint32_t RegisterBatch(Mesh mesh, Material material);
+		void PostToBatch(uint32_t handle, glm::mat4 transform);
+		void SubmitBatch(uint32_t handle);
+		uint32_t QueryBatch(uint32_t handle);
 
 		void BeginFrame();
 		void RenderMesh(Mesh mesh);
@@ -27,6 +33,9 @@ namespace Core {
 
 		// gfx
 		Ref<GraphicsPipeline> _pipeline;
+
+		// batches
+		std::vector<Ref<MeshBatch>> _batches;
 
 
 	};

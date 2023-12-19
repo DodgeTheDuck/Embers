@@ -9,6 +9,29 @@ namespace Core {
 		_InitGraphics();
 	}
 
+	uint32_t Graphics::RegisterBatch(Mesh mesh, Material material) {
+		_batches.push_back(CreateRef<MeshBatch>(mesh, material));
+		return (uint32_t)_batches.size()-1;
+	}
+
+	void Graphics::PostToBatch(uint32_t handle, glm::mat4 transform)
+	{
+		_batches[handle]->AddTransform(transform);
+	}
+
+	void Graphics::SubmitBatch(uint32_t handle)
+	{
+		auto& batch = _batches[handle];
+		batch->Begin();
+		glDrawElementsInstanced(GL_TRIANGLES, batch->GetMesh().IndexCount(), GL_UNSIGNED_INT, (void*)0, batch->InstanceCount());
+		batch->End();
+	}
+
+	uint32_t Graphics::QueryBatch(uint32_t handle)
+	{
+		return _batches[handle]->InstanceCount();
+	}
+
 	void Graphics::BeginFrame() {
 		_pipeline->BeginFrame();
 	}

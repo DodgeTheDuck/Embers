@@ -27,4 +27,15 @@ namespace Core {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	void Vbo::Delete()
+	{
+		glDeleteBuffers(1, &_vbo);
+		_vbo = 0;
+	}
+
+	bool Vbo::IsValid()
+	{
+		return _vbo > 0;
+	}
+
 }

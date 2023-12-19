@@ -15,7 +15,11 @@ namespace Core {
 		Mesh();
 		Mesh(Primitive& primitive);
 
-		void Bind();		
+		void Bind();
+
+		Vao GetVao();
+		Vbo GetVbo();
+		Ebo GetEbo();
 
 		uint32_t VertCount();
 		uint32_t IndexCount();

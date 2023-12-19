@@ -6,6 +6,8 @@
 #include <core/asset/asset_mesh.h>
 #include <core/ecs/system/model_system.h>
 #include <core/ecs/system/camera_system.h>
+#include <core/ecs/system/physics_system.h>
+#include <core/ecs/system/particle_emitter_system.h>
 
 namespace Core {
 	
@@ -31,24 +33,28 @@ namespace Core {
 		_assetManager = CreateRef<AssetManager>();
 		
 		_assetManager->AddAsset<AssetShader>("shader_particle", std::make_shared<AssetShader>("particle.vert", "particle.frag"));
+		_assetManager->AddAsset<AssetShader>("shader_particle_instanced", std::make_shared<AssetShader>("particle_instanced.vert", "particle_instanced.frag"));
 		_assetManager->AddAsset<AssetMesh>("mesh_rect", CreateRef<AssetMesh>(
 			(Primitive&)Rectangle::Make(1.0f, 1.0f, glm::vec3(1.0f))
 		));
-
-		// TEMP
-		_assetManager->GetAsset<AssetShader>("shader_particle")->Use();
 
 		// ecs
 		_registry = CreateRef<entt::registry>();
 		_systems.push_back(std::make_shared<System::Model>());
 		_systems.push_back(std::make_shared<System::Camera>());
+		_systems.push_back(std::make_shared<System::Physics>());
+		_systems.push_back(std::make_shared<System::ParticleEmitter>());
+
+		for (auto& system : _systems) {
+			system->Init();
+		}
 
 		// add and initiate the client state
 		PushAndInitAppState(bootstrappingState);
 
 		// init conductor last to start timing as close to main loop as possible
 		_conductor.Init();
-		_tps = _conductor.CreateTimer("TPS", 1000.0 / 128.0);
+		_tps = _conductor.CreateTimer("TPS", 1000.0 / 64.0);
 		_fps = _conductor.CreateTimer("FPS", 1000.0 / 1024.0);
 
 	}
@@ -89,7 +95,7 @@ namespace Core {
 
 	void EmbersEngine::_Tick(double dt)
 	{
-		_appStates.front()->Tick();
+		_appStates.top()->Tick();
 
 		for (auto& system : _systems) {
 			system->Tick(_registry, dt);
@@ -106,7 +112,7 @@ namespace Core {
 			system->PreRender(_registry, dt);
 		}
 
-		_appStates.front()->Render();
+		_appStates.top()->Render();
 
 		auto gfxPipeline = _graphics->GetPipeline();
 
@@ -127,6 +133,9 @@ namespace Core {
 
 		_gui->Begin();
 		_conductor.Gui();
+		for (auto& system : _systems) {
+			system->Gui(_registry, dt);
+		}
 		_gui->End();
 
 		for (auto& system : _systems) {

@@ -31,7 +31,7 @@ namespace Core {
 	private:
 		std::vector<Timer> _timers;
 		steady_clock::time_point _timeLastTick;
-		double _secAccumulator;
+		double _secAccumulator{};
 
 	};
 

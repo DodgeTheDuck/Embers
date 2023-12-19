@@ -47,7 +47,7 @@ namespace Core {
 		Ref<Gui> _gui;
 
 		// states
-		std::queue<Ref<AppState>> _appStates;
+		std::stack<Ref<AppState>> _appStates;
 
 		// assets
 		Ref<AssetManager> _assetManager;
@@ -61,8 +61,8 @@ namespace Core {
 
 		// timing
 		Conductor _conductor;
-		conductor_timer _tps;
-		conductor_timer _fps;
+		conductor_timer _tps{};
+		conductor_timer _fps{};
 
 		double _secAcc{};
 		double _tpsAcc{};

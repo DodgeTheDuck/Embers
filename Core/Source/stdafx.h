@@ -14,6 +14,7 @@
 #include <queue>
 #include <vector>
 #include <stack>
+#include <span>
 #include <iostream>
 #include <array>
 #include <bitset>
