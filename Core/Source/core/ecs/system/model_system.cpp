@@ -17,11 +17,11 @@ namespace Core::System {
 	{
 	}
 
-	void Model::PreRender(Ref<entt::registry> registry, double dt)
+	void Model::PreRender(Ref<entt::registry> registry)
 	{
 	}
 
-	void Model::RenderPass(Ref<entt::registry> registry, double dt, uint32_t passIndex)
+	void Model::RenderPass(Ref<entt::registry> registry, uint32_t passIndex)
 	{
 
 		auto view = registry->view<Component::Transform, Component::Model>();
@@ -30,9 +30,8 @@ namespace Core::System {
 			auto& cModel = view.get<Component::Model>(entity);
 			auto& cTransform = view.get<Component::Transform>(entity);			
 
-			cModel.Material.Apply(Gfx()->GetPipeline()->State(), cTransform.Matrix());
-
 			for (auto& mesh : cModel.Meshes) {
+				cModel.Material.Apply(Gfx()->GetPipeline()->State(), cTransform.Matrix(), mesh.Properties());
 				Gfx()->RenderMesh(mesh);
 			}
 		}
@@ -43,7 +42,7 @@ namespace Core::System {
 	{
 	}
 
-	void Model::PostRender(Ref<entt::registry> registry, double dt)
+	void Model::PostRender(Ref<entt::registry> registry)
 	{
 	}
 

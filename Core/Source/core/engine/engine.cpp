@@ -3,11 +3,11 @@
 #include <core/geometry/primitive.h>
 #include <core/geometry/mesh.h>
 #include <core/asset/asset_shader.h>
+#include <core/loader/model_loader.h>
+#include <core/asset/asset_model.h>
+#include <core/asset/asset_texture.h>
 #include <core/asset/asset_mesh.h>
-#include <core/ecs/system/model_system.h>
-#include <core/ecs/system/camera_system.h>
-#include <core/ecs/system/physics_system.h>
-#include <core/ecs/system/particle_emitter_system.h>
+#include <core/gl/texture.h>
 
 namespace Core {
 	
@@ -23,7 +23,7 @@ namespace Core {
 		_graphics->Init(hInstance, _window.GetHwnd());
 
 		// setup gui
-		_gui = CreateRef<Gui>();
+		_gui = CreateRef<Gui::GuiManager>();
 		_gui->Init(_window.GetHwnd());
 
 		// setup input
@@ -31,27 +31,18 @@ namespace Core {
 
 		// setup assets
 		_assetManager = CreateRef<AssetManager>();
-		
-		_assetManager->AddAsset<AssetShader>("shader_particle", std::make_shared<AssetShader>("particle.vert", "particle.frag"));
+		_assetManager->AddAsset<AssetShader>("shader_model", std::make_shared<AssetShader>("model.vert", "model.frag"));
 		_assetManager->AddAsset<AssetShader>("shader_particle_instanced", std::make_shared<AssetShader>("particle_instanced.vert", "particle_instanced.frag"));
 		_assetManager->AddAsset<AssetMesh>("mesh_rect", CreateRef<AssetMesh>(
 			(Primitive&)Rectangle::Make(1.0f, 1.0f, glm::vec3(1.0f))
 		));
 
-		// ecs
-		_registry = CreateRef<entt::registry>();
-		_systems.push_back(std::make_shared<System::Model>());
-		_systems.push_back(std::make_shared<System::Camera>());
-		_systems.push_back(std::make_shared<System::Physics>());
-		_systems.push_back(std::make_shared<System::ParticleEmitter>());
-
-		for (auto& system : _systems) {
-			system->Init();
-		}
+		auto model = ModelLoader().Load("roman_armour/armour_hd.glb");
+		_assetManager->AddAsset<AssetModel>("model_armour", std::make_shared<AssetModel>(model->GetMeshes(), model->GetMaterial()));
 
 		// add and initiate the client state
-		PushAndInitAppState(bootstrappingState);
-
+		PushAppState(bootstrappingState);		
+		
 		// init conductor last to start timing as close to main loop as possible
 		_conductor.Init();
 		_tps = _conductor.CreateTimer("TPS", 1000.0 / 64.0);
@@ -69,79 +60,75 @@ namespace Core {
 		}
 	}
 
-	Ref<Graphics> EmbersEngine::GetGraphics()
+	Ref<Graphics> EmbersEngine::GetGraphics() const
 	{
 		return _graphics;
 	}
 
-	Ref<Input::Keyboard> EmbersEngine::GetKeyboard()
+	Ref<Input::Keyboard> EmbersEngine::GetKeyboard() const
 	{
 		return _keyboard;
 	}
 
-	Ref<AssetManager> EmbersEngine::GetAssetManager()
+	Ref<AssetManager> EmbersEngine::GetAssetManager() const
 	{
 		return _assetManager;
 	}
-	
-	Ref<entt::registry> EmbersEngine::GetRegistry() {
-		return _registry;
+
+	Ref<Gui::GuiManager> EmbersEngine::GetGuiManager() const
+	{
+		return _gui;
 	}
 
-	void EmbersEngine::PushAndInitAppState(std::shared_ptr<AppState> appState) {
+	Ref<Scene> EmbersEngine::GetActiveScene() const
+	{
+		return _scenes.front();
+	}
+
+	void EmbersEngine::PushAppState(Ref<AppState> appState) {
 		_appStates.push(appState);
 		appState->Init();
 	}
 
+	void EmbersEngine::PushScene() {
+		_scenes.push(CreateRef<Scene>());
+	}
+
 	void EmbersEngine::_Tick(double dt)
 	{
-		_appStates.top()->Tick();
-
-		for (auto& system : _systems) {
-			system->Tick(_registry, dt);
-		}
-
+		_appStates.top()->Tick(dt);
+		if (_scenes.size() > 0) _scenes.front()->Tick(dt);
 	}
 
 	void EmbersEngine::_Render(double dt)
 	{
 
+		// rendering
 		_graphics->BeginFrame();
 
-		for (auto& system : _systems) {
-			system->PreRender(_registry, dt);
-		}
-
-		_appStates.top()->Render();
+		if (_scenes.size() > 0) _scenes.front()->PreRender();
 
 		auto gfxPipeline = _graphics->GetPipeline();
 
-		while (gfxPipeline->Process()) {
-			
-			auto passIndex = gfxPipeline->ActivePass();
-
-			gfxPipeline->BeginPass();
-						
-			for (auto& system : _systems) {
-				system->RenderPass(_registry, dt, passIndex);
+		if (gfxPipeline != nullptr) {
+			while (gfxPipeline->Process()) {
+				auto passIndex = gfxPipeline->ActivePassIndex();
+				gfxPipeline->BeginPass();
+				if(_scenes.size() > 0) _scenes.front()->Render(passIndex);
+				gfxPipeline->EndPass();
+				gfxPipeline->NextPass();
 			}
-			
-			gfxPipeline->EndPass();			
-			gfxPipeline->NextPass();
-
 		}
 
+		if (_scenes.size() > 0) _scenes.front()->PostRender();
+
+		// gui
 		_gui->Begin();
 		_conductor.Gui();
-		for (auto& system : _systems) {
-			system->Gui(_registry, dt);
-		}
+		_gui->DrawWidgets();
 		_gui->End();
 
-		for (auto& system : _systems) {
-			system->PostRender(_registry, dt);
-		}
-
+		// rendering complete
 		_graphics->EndFrame();
 
 	}

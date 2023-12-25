@@ -2,12 +2,11 @@
 
 namespace Core {
 
-	class Vertex {
-	public:
-		Vertex() = default;
-		Vertex(glm::vec3 position, glm::vec3 color) : position(position), color(color) {};
-		glm::vec3 position;
-		glm::vec3 color;
+	struct Vertex {
+		glm::vec3 Position;
+		glm::vec3 Color;
+		glm::vec2 UV;
+		glm::vec3 Normal;
 	};
 
 }

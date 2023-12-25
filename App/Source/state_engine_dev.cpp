@@ -11,13 +11,23 @@
 #include <core/asset/asset_shader.h>
 #include <core/geometry/primitive.h>
 #include <core/base.h>
+#include <core/asset/asset_texture.h>
 
 void StateEngineDev::Init()
 {
 	Gfx()->SetPipeline(std::make_shared<GraphicsPipelineForwardBasic>());
 
 	auto camera = Entities()->create();
-	auto emitter = Entities()->create();		
+	auto model = Entities()->create();
+
+	auto& cModelModel = Entities()->emplace<Component::Model>(model);
+	auto& cModelTransform = Entities()->emplace<Component::Transform>(model);
+
+	auto mesh = Assets()->CopyAsset<AssetMesh>("mesh_rect");
+	mesh.Properties().textures[MaterialTextureType::ALBEDO] = Assets()->CopyAsset<AssetTexture>("texture_unicorn");
+
+	cModelModel.Meshes.push_back(mesh);
+	cModelModel.Material = Material(Assets()->CopyAsset<AssetShader>("shader_model"));
 
 	auto& cCameraCamera = Entities()->emplace<Component::Camera>(camera);
 	auto& cCameraTransform = Entities()->emplace<Component::Transform>(camera);
@@ -28,18 +38,6 @@ void StateEngineDev::Init()
 	cCameraCamera.projection = glm::perspective(cCameraCamera.fov, 1024.0f / 768.0f, cCameraCamera.viewNear, cCameraCamera.viewFar);
 	cCameraCamera.view = glm::mat4();
 
-	auto& cEmitterEmitter = Entities()->emplace<Component::ParticleEmitter>(emitter);
-	auto& cEmitterTransform = Entities()->emplace<Component::Transform>(emitter);
-
-	cEmitterEmitter.lifeTimeS = 1.5;
-	cEmitterEmitter.emitPerSec = 1024;
-	cEmitterEmitter.emitDirection = glm::vec3(0, 1, 0);
-	cEmitterEmitter.emitDirectionVariance = 20;
-	cEmitterEmitter.emitVelocityMin = 5;
-	cEmitterEmitter.emitVelocityMax = 8;
-	cEmitterEmitter.emitColorMin = glm::vec3(0, 0, 0.4);
-	cEmitterEmitter.emitColorMax = glm::vec3(0.8, 0.8, 1.0);
-	cEmitterEmitter.partColorEnd = glm::vec3(0.8, 0.8, 1.0);
 
 }
 

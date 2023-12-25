@@ -6,7 +6,7 @@ namespace Core {
 
 	public:
 		void GenerateBuffer();
-		void VertexAttribPointer(uint32_t index, uint32_t size, uint32_t type, uint32_t stride, void * pointer);
+		void VertexAttribPointer(uint32_t index, uint32_t size, uint32_t type, size_t stride, void * pointer);
 		void VertexAttribDivisor(uint32_t location, uint32_t divisor);
 		void Bind();
 		void Unbind();

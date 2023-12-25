@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "graphics_pipeline_forward_basic.h"
 #include "graphics_state_depth_basic.h"
+#include "core/engine/engine.h"
+#include "core/asset/asset_shader.h"
 
 namespace Core {
 
@@ -14,6 +16,7 @@ namespace Core {
 		_state->Init();
 
 		_stages.push_back(Core::GraphicsPipelinePass());
+		_defaultShader = ASSETS()->CopyAsset<AssetShader>("shader_model");
 
 	}
 

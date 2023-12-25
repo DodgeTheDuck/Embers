@@ -8,8 +8,8 @@ namespace Core {
 
 		int success;
 
-		Shader vert = Shader("./shaders/" + vertName, EShaderType::Vertex);
-		Shader frag = Shader("./shaders/" + fragName, EShaderType::Fragment);
+		Shader vert = Shader("./assets/shaders/" + vertName, EShaderType::Vertex);
+		Shader frag = Shader("./assets/shaders/" + fragName, EShaderType::Fragment);
 
 		_shaderProg = glCreateProgram();
 		glAttachShader(_shaderProg, vert.Get());
@@ -40,10 +40,22 @@ namespace Core {
 		glUniformMatrix4fv(loc, 1, false, glm::value_ptr(mat));
 	}
 
+	void ShaderProgram::UniformMat3(const glm::mat3 mat, const char* uniformName)
+	{
+		uint32_t loc = glGetUniformLocation(_shaderProg, uniformName);
+		glUniformMatrix3fv(loc, 1, false, glm::value_ptr(mat));
+	}
+
 	void ShaderProgram::UniformVec3(glm::vec3 vec, const char* uniformName)
 	{
 		uint32_t loc = glGetUniformLocation(_shaderProg, uniformName);
 		glUniform3fv(loc, 1, glm::value_ptr(vec));
+	}
+
+	void ShaderProgram::UniformInt(const int value, const char* uniformName)
+	{
+		uint32_t loc = glGetUniformLocation(_shaderProg, uniformName);
+		glUniform1i(loc, value);
 	}
 
 }

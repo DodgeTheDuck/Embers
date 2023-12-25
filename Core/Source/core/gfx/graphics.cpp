@@ -33,7 +33,9 @@ namespace Core {
 	}
 
 	void Graphics::BeginFrame() {
-		_pipeline->BeginFrame();
+		if (_pipeline != nullptr) {
+			_pipeline->BeginFrame();
+		}
 	}
 
 	void Graphics::RenderMesh(Mesh mesh)
@@ -43,7 +45,9 @@ namespace Core {
 	}
 
 	void Graphics::EndFrame() {
-		_pipeline->EndFrame();
+		if (_pipeline != nullptr) {
+			_pipeline->EndFrame();
+		}
 		SwapBuffers(_dc);
 	}
 

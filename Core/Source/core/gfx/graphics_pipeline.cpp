@@ -14,19 +14,19 @@ namespace Core {
 
 	void GraphicsPipeline::BeginPass()
 	{
-		auto pass = _stages[_activePass];
+		auto& pass = _stages[_activePass];
 		_state->BeginPass(_activePass);
 		pass.Begin();
 	}
 
-	uint32_t GraphicsPipeline::ActivePass()
+	uint32_t GraphicsPipeline::ActivePassIndex()
 	{
 		return _activePass;
 	}
 
 	void GraphicsPipeline::EndPass()
 	{
-		auto pass = _stages[_activePass];
+		auto& pass = _stages[_activePass];
 		_state->EndPass(_activePass);
 		pass.End();
 	}
@@ -34,7 +34,12 @@ namespace Core {
 	void GraphicsPipeline::NextPass()
 	{
 		_activePass++;
-	}	
+	}
+	ShaderProgram GraphicsPipeline::DefaultShader()
+	{
+		return _defaultShader;
+	}
+
 
 	Ref<GraphicsState> GraphicsPipeline::State()
 	{

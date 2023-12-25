@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "gui.h"
 
-namespace Core {
+namespace Core::Gui {
 
-	void Gui::Init(HWND hwnd) {
+	void GuiManager::Init(HWND hwnd) {
 		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
+		_context = ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		ImGui::StyleColorsDark();
@@ -13,15 +13,31 @@ namespace Core {
 		ImGui_ImplOpenGL3_Init();
 	}
 
-	void Gui::Begin() {
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();		
+	void GuiManager::AddWidget(Ref<Widget> widget) {
+		_widgets.push_back(widget);
 	}
 
-	void Gui::End() {
+	void GuiManager::Begin() {
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+	}
+
+	void GuiManager::DrawWidgets()
+	{
+		for (auto& widget : _widgets) {
+			widget->Draw();
+		}
+	}
+
+	void GuiManager::End() {
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+	ImGuiContext* GuiManager::GetContext()
+	{
+		return _context;
 	}
 
 }

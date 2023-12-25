@@ -10,8 +10,8 @@ namespace Core {
 		glGenVertexArrays(1, &_vao);
 	}
 
-	void Vao::VertexAttribPointer(uint32_t index, uint32_t size, uint32_t type, uint32_t stride, void * pointer) {
-		glVertexAttribPointer(index, size, type, GL_FALSE, stride, pointer);
+	void Vao::VertexAttribPointer(uint32_t index, uint32_t size, uint32_t type, size_t stride, void * pointer) {
+		glVertexAttribPointer(index, size, type, GL_FALSE, (GLsizei)stride, pointer);
 		glEnableVertexAttribArray(index);
 	}
 

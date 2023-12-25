@@ -13,6 +13,7 @@ namespace Core {
 	class ENGINE_API Mesh {
 	public:
 		Mesh();
+		Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, MaterialProperties properties);
 		Mesh(Primitive& primitive);
 
 		void Bind();
@@ -21,11 +22,13 @@ namespace Core {
 		Vbo GetVbo();
 		Ebo GetEbo();
 
+		MaterialProperties& Properties();
+
 		uint32_t VertCount();
 		uint32_t IndexCount();
 		
 	private:
-		void _Make(std::vector<Vertex> vertices, std::vector<uint32_t> indices);		
+		void _Make(std::vector<Vertex> vertices, std::vector<uint32_t> indices, MaterialProperties properties);
 
 		uint32_t _nVerts{};
 		uint32_t _nIndices{};
@@ -33,6 +36,8 @@ namespace Core {
 		Vbo _vbo{};
 		Vao _vao{};
 		Ebo _ebo{};
+
+		MaterialProperties _materialProperties;
 
 	};
 

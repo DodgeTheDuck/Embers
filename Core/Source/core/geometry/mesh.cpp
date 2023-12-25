@@ -7,9 +7,14 @@ namespace Core {
 	{
 	}
 
+	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, MaterialProperties properties)
+	{
+		_Make(vertices, indices, properties);
+	}
+
 	Mesh::Mesh(Primitive& primitive)
 	{
-		_Make(primitive.GetVertices(), primitive.GetIndices());
+		_Make(primitive.GetVertices(), primitive.GetIndices(), primitive.Properties());
 	}
 
 	void Mesh::Bind()
@@ -32,6 +37,11 @@ namespace Core {
 		return _ebo;
 	}
 
+	MaterialProperties& Mesh::Properties()
+	{
+		return _materialProperties;
+	}
+
 	uint32_t Mesh::VertCount()
 	{
 		return _nVerts;
@@ -42,7 +52,7 @@ namespace Core {
 		return _nIndices;
 	}
 
-	void Mesh::_Make(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
+	void Mesh::_Make(std::vector<Vertex> vertices, std::vector<uint32_t> indices, MaterialProperties properties)
 	{
 
 		_vao.GenerateBuffer();
@@ -56,7 +66,10 @@ namespace Core {
 		_vbo.Bind();
 		_ebo.Bind();
 
-		_vao.VertexAttribPointer(0, 3, GL_FLOAT, sizeof(float) * 6, (void*)0);
+		/* pos */ _vao.VertexAttribPointer(0, 3, GL_FLOAT, sizeof(float) * 11, (void*)0);
+		/* col */ _vao.VertexAttribPointer(1, 3, GL_FLOAT, sizeof(float) * 11, (void*)(sizeof(float) * 3));
+		/* uvs */ _vao.VertexAttribPointer(2, 2, GL_FLOAT, sizeof(float) * 11, (void*)(sizeof(float) * 6));
+		/* nrm */ _vao.VertexAttribPointer(3, 3, GL_FLOAT, sizeof(float) * 11, (void*)(sizeof(float) * 8));
 
 		_vao.Unbind();
 		_vbo.Unbind();
@@ -64,6 +77,7 @@ namespace Core {
 
 		_nVerts = vertices.size();
 		_nIndices = indices.size();
+		_materialProperties = properties;
 
 	}
 

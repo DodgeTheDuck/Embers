@@ -12,14 +12,17 @@ namespace Core {
 
 		glm::mat4 GetProjectionMatrix();
 		glm::mat4 GetViewMatrix();
+		glm::vec3 GetCameraPosition();
 
 		void SetProjectMatrix(glm::mat4 projectionMatrix);
 		void SetViewMatrix(glm::mat4 viewMatrix);
+		void SetCameraPosition(glm::vec3 cameraPos);
 
 	private:
 
 		glm::mat4 _projectionMatrix;
 		glm::mat4 _viewMatrix;
+		glm::vec3 _cameraPos;
 
 
 	};

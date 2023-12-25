@@ -14,6 +14,11 @@ namespace Core {
 		return _viewMatrix;
 	}
 
+	glm::vec3 GraphicsState::GetCameraPosition()
+	{
+		return _cameraPos;
+	}
+
 	void GraphicsState::SetProjectMatrix(glm::mat4 projectionMatrix)
 	{
 		_projectionMatrix = projectionMatrix;
@@ -22,6 +27,11 @@ namespace Core {
 	void GraphicsState::SetViewMatrix(glm::mat4 viewMatrix)
 	{
 		_viewMatrix = viewMatrix;
+	}
+
+	void GraphicsState::SetCameraPosition(glm::vec3 cameraPos)
+	{
+		_cameraPos = cameraPos;
 	}
 
 }

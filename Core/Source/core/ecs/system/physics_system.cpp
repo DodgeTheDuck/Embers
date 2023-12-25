@@ -30,11 +30,11 @@ namespace Core::System {
 		}
 	}
 
-	void Physics::PreRender(Ref<entt::registry> registry, double dt)
+	void Physics::PreRender(Ref<entt::registry> registry)
 	{
 	}
 
-	void Physics::RenderPass(Ref<entt::registry> registry, double dt, uint32_t renderPass)
+	void Physics::RenderPass(Ref<entt::registry> registry, uint32_t renderPass)
 	{
 	}
 
@@ -42,7 +42,7 @@ namespace Core::System {
 	{
 	}
 
-	void Physics::PostRender(Ref<entt::registry> registry, double dt)
+	void Physics::PostRender(Ref<entt::registry> registry)
 	{
 	}
 }

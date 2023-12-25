@@ -86,27 +86,29 @@ namespace Core::System {
 		}
 
 	}
-	void Camera::PreRender(Ref<entt::registry> registry, double dt)
+	void Camera::PreRender(Ref<entt::registry> registry)
 	{
 
-		auto view = registry->view<Component::Camera>();
+		auto view = registry->view<Component::Camera, Component::Transform>();
 
 		for (auto& entity : view) {
 
 			auto& cCamera = registry->get<Component::Camera>(entity);
+			auto& cTransform = registry->get<Component::Transform>(entity);
 			Gfx()->GetPipeline()->State()->SetProjectMatrix(cCamera.projection);
 			Gfx()->GetPipeline()->State()->SetViewMatrix(cCamera.view);
+			Gfx()->GetPipeline()->State()->SetCameraPosition(cTransform.position);
 
 		}
 
 	}
-	void Camera::RenderPass(Ref<entt::registry> registry, double dt, uint32_t passIndex)
+	void Camera::RenderPass(Ref<entt::registry> registry, uint32_t passIndex)
 	{
 	}
 	void Camera::Gui(Ref<entt::registry> registry, double dt)
 	{
 	}
-	void Camera::PostRender(Ref<entt::registry> registry, double dt)
+	void Camera::PostRender(Ref<entt::registry> registry)
 	{
 	}
 

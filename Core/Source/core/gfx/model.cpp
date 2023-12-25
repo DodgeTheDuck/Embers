@@ -8,18 +8,18 @@ namespace Core {
 
 	}
 
-	Model::Model(std::vector<Mesh> meshes, Ref<Material> material)
+	Model::Model(std::vector<Mesh> meshes, Material material)
 	{
 		_meshes = meshes;
 		_material = material;
 	}
 
-	Ref<Material> Model::GetMaterial()
+	Material Model::GetMaterial()
 	{
 		return _material;
 	}
 
-	std::vector<Mesh> Model::Meshes()
+	std::vector<Mesh> Model::GetMeshes()
 	{
 		return _meshes;
 	}

@@ -38,14 +38,16 @@ namespace Core::System {
 		_TickParticles(registry, dt);
 	}
 
-	void ParticleEmitter::PreRender(Ref<entt::registry> registry, double dt)
+	void ParticleEmitter::PreRender(Ref<entt::registry> registry)
 	{
 		_RenderParticles();
 	}
 
-	void ParticleEmitter::RenderPass(Ref<entt::registry> registry, double dt, uint32_t renderPass)
+	void ParticleEmitter::RenderPass(Ref<entt::registry> registry, uint32_t renderPass)
 	{				
-		Gfx()->SubmitBatch(_batch);
+		if (ParticleEmitter::_nParticles > 0) {
+			Gfx()->SubmitBatch(_batch);
+		}
 	}
 
 	void ParticleEmitter::Gui(Ref<entt::registry> registry, double dt)
@@ -59,7 +61,7 @@ namespace Core::System {
 
 	}
 
-	void ParticleEmitter::PostRender(Ref<entt::registry> registry, double dt)
+	void ParticleEmitter::PostRender(Ref<entt::registry> registry)
 	{
 
 	}
@@ -87,7 +89,7 @@ namespace Core::System {
 
 			if (totalAcc >= 1.0 / cParticleEmitter.emitPerSec) {
 
-				int nSpawn = totalAcc / (1.0 / cParticleEmitter.emitPerSec);
+				int nSpawn = (int)round(totalAcc / (1.0 / cParticleEmitter.emitPerSec));
 
 				for (int i = 0; i < nSpawn; i++) {
 

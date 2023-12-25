@@ -1,13 +1,22 @@
 #pragma once
 
-namespace Core {
+#include "dll.h"
+#include "widget.h"
 
-	class Gui {
+namespace Core::Gui {
+
+	class ENGINE_API GuiManager {
 
 	public:
 		void Init(HWND hwnd);
+		void AddWidget(Ref<Widget> widget);
 		void Begin();
+		void DrawWidgets();
 		void End();
+		ImGuiContext* GetContext();
+	private:
+		ImGuiContext* _context;
+		std::vector<Ref<Widget>> _widgets;
 
 	};
 

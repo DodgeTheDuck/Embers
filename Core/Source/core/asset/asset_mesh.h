@@ -1,7 +1,7 @@
 #pragma once
 
 #include <core/asset/asset.h>
-#include <core/gfx/model.h>
+#include <core/geometry/mesh.h>
 
 namespace Core {
 	class AssetMesh : public Asset, public Mesh {	

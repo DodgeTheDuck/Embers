@@ -9,15 +9,14 @@ namespace Core {
 
 	public:
 		Model();
-		Model(std::vector<Mesh> meshes, Ref<Material> material);
+		Model(std::vector<Mesh> meshes, Material material);
 
-		Ref<Material> GetMaterial();
-
-		std::vector<Mesh> Meshes();
+		Material GetMaterial();
+		std::vector<Mesh> GetMeshes();
 
 	protected:
 		std::vector<Mesh> _meshes{};
-		std::shared_ptr<Material> _material;
+		Material _material;
 
 	};
 
