@@ -12,3 +12,6 @@ Makefile
 
 # Exclude
 !Vendor/Binaries
+/App/assets
+/Core/assets/models
+/Core/assets/textures
