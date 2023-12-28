@@ -1,8 +1,10 @@
 #pragma once
 
+#include "dll.h"
+
 namespace Core::Component {
 
-	struct Camera {
+	struct ENGINE_API Camera {	
 		float fov;
 		float viewNear;
 		float viewFar;

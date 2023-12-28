@@ -25,10 +25,16 @@ namespace Core {
 	public:
 		Material();
 		Material(ShaderProgram shader);
-		void Apply(Ref<GraphicsState> state, glm::mat4 modelMatrix, MaterialProperties& properties);
+		void Apply(glm::mat4 modelMatrix, MaterialProperties& properties);
 
 	private:
 		ShaderProgram _shader;
+
+		int _uni_m;
+		int _uni_v;
+		int _uni_p;
+		int _uni_camera_pos;
+		int _uni_normal_matrix;
 
 	};
 

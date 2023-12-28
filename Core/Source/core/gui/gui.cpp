@@ -13,8 +13,9 @@ namespace Core::Gui {
 		ImGui_ImplOpenGL3_Init();
 	}
 
-	void GuiManager::AddWidget(Ref<Widget> widget) {
+	Ref<Widget> GuiManager::AddWidget(Ref<Widget> widget) {
 		_widgets.push_back(widget);
+		return widget;
 	}
 
 	void GuiManager::Begin() {

@@ -52,7 +52,7 @@ namespace Core {
 		meshVao.VertexAttribDivisor(5, 1);
 		meshVao.VertexAttribDivisor(6, 1);		
 
-		_material.Apply(Gfx()->GetPipeline()->State(), glm::mat4(), _mesh.Properties());
+		_material.Apply(glm::mat4(), _mesh.Properties());
 
 	}
 

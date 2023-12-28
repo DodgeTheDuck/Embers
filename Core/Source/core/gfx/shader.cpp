@@ -27,6 +27,7 @@ namespace Core {
 		switch (type) {
 		case EShaderType::Vertex: _shader = glCreateShader(GL_VERTEX_SHADER); break;
 		case EShaderType::Fragment: _shader = glCreateShader(GL_FRAGMENT_SHADER); break;
+		case EShaderType::Geometry: _shader = glCreateShader(GL_GEOMETRY_SHADER); break;
 		default: std::cout << "invalid shader type"; return;
 		}
 		shaderSrc = shaderStream.str();

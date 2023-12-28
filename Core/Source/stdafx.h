@@ -22,6 +22,7 @@
 #include <unordered_map>
 #include <Windows.h>
 #include <entt/entt.hpp>
+#include <entt/entity/registry.hpp>
 #include <chrono>
 #include <fstream>
 #include <glm/glm.hpp>

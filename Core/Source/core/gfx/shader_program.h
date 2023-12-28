@@ -7,11 +7,16 @@ namespace Core {
 	public:
 		ShaderProgram() = default;
 		ShaderProgram(const std::string vertName, const std::string fragName);
+		ShaderProgram(const std::string vertName, const std::string geomName, const std::string fragName);
 
-		void UniformMat4(const glm::mat4 mat, const char* uniformName);
-		void UniformMat3(const glm::mat3 mat, const char* uniformName);
-		void UniformVec3(const glm::vec3 vec, const char* uniformName);
-		void UniformInt(const int value, const char* uniformName);
+		int GetUniformLocation(const char* name);
+
+		void UniformMat4(const glm::mat4 mat, int loc);
+		void UniformMat3(const glm::mat3 mat, int loc);
+		void UniformVec3(const glm::vec3 vec, int loc);
+		void UniformInt(const int value, int loc);
+		void UniformUInt(const unsigned int value, int loc);
+		void UniformFloat(const float value, int loc);
 
 		void Use();
 

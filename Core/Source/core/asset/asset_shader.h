@@ -9,6 +9,7 @@ namespace Core {
 	public:
 		AssetShader() = default;
 		AssetShader(const std::string vertName, const std::string fragName) : ShaderProgram(vertName, fragName) {};
+		AssetShader(const std::string vertName, const std::string geomName, const std::string fragName) : ShaderProgram(vertName, geomName, fragName) {};
 	};
 
 }

@@ -2,8 +2,11 @@
 #include "scene.h"
 #include "core/ecs/component/base_component.h"
 #include <core/ecs/system/model_system.h>
+#include <core/ecs/system/system_extension.h>
 #include <core/ecs/system/camera_system.h>
 #include <core/ecs/system/physics_system.h>
+#include <core/ecs/system/terrain_system.h>
+#include <core/ecs/system/sky_system.h>
 #include <core/ecs/system/particle_emitter_system.h>
 
 namespace Core {
@@ -14,8 +17,13 @@ namespace Core {
 		_systems.push_back(std::make_shared<System::Camera>());
 		_systems.push_back(std::make_shared<System::Physics>());
 		_systems.push_back(std::make_shared<System::ParticleEmitter>());
+		_systems.push_back(std::make_shared<System::Terrain>());
+		_systems.push_back(std::make_shared<System::Sky>());
 		for (auto& system : _systems) {
 			system->Init();
+			for (auto& extension : system->Extensions()) {
+				extension->Init();
+			}
 		}
 	}
 
@@ -23,6 +31,9 @@ namespace Core {
 	{
 		for (auto& system : _systems) {
 			system->Tick(_registry, delta);
+			for (auto& extension : system->Extensions()) {
+				extension->Tick(_registry, delta);
+			}
 		}
 	}
 
@@ -30,6 +41,9 @@ namespace Core {
 	{
 		for (auto& system : _systems) {
 			system->PreRender(_registry);
+			for (auto& extension : system->Extensions()) {
+				extension->PreRender(_registry);
+			}
 		}
 	}
 
@@ -37,6 +51,9 @@ namespace Core {
 	{
 		for (auto& system : _systems) {
 			system->RenderPass(_registry, passIndex);
+			for (auto& extension : system->Extensions()) {
+				extension->RenderPass(_registry, passIndex);
+			}
 		}
 	}
 
@@ -44,6 +61,9 @@ namespace Core {
 	{
 		for (auto& system : _systems) {
 			system->PostRender(_registry);
+			for (auto& extension : system->Extensions()) {
+				extension->PostRender(_registry);
+			}
 		}
 	}
 

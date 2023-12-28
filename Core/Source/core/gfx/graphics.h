@@ -7,6 +7,11 @@
 
 namespace Core {
 
+	enum RenderStyle {
+		RENDER_STYLE_TRIANGLES = 0x0004,
+		RENDER_STYLE_POINTS = 0x0000
+	};
+
 	class ENGINE_API Graphics {
 
 	public:
@@ -19,8 +24,10 @@ namespace Core {
 		void SubmitBatch(uint32_t handle);
 		uint32_t QueryBatch(uint32_t handle);
 
+		void DepthRange(double viewNear, double viewFar);
+
 		void BeginFrame();
-		void RenderMesh(Mesh mesh);
+		void RenderMesh(Mesh& mesh, RenderStyle style = RENDER_STYLE_TRIANGLES);
 		void EndFrame();
 
 	private:

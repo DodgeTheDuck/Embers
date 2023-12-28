@@ -16,7 +16,7 @@ namespace Core {
                 // Cast the base Asset pointer to the desired type
                 return std::dynamic_pointer_cast<T>(it->second);
             }
-            return nullptr; // Asset not found
+            Error::Exit(L"asset not found");
         }
 
         template <typename T>
@@ -32,7 +32,7 @@ namespace Core {
                 }
             }
             // Return a default-constructed object if the asset is not found or cannot be cast to the desired type
-            return T();
+            Error::Exit(L"asset not found");
         }
 
         // Function to add an asset to the manager

@@ -76,4 +76,17 @@ namespace Core {
 		}
 	};
 
+
+	class ENGINE_API Point : public Primitive {
+	public:
+		static Point Make(glm::vec3 position) {
+			Point p;
+			Vertex v;
+			v.Position = position;
+			p.AddVertex(v);
+			p.AddIndex(0);
+			return p;
+		}
+	};
+
 }

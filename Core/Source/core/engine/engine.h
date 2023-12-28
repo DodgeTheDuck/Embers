@@ -30,8 +30,8 @@ namespace Core {
 		Ref<Gui::GuiManager>				GetGuiManager() const;
 		Ref<Scene>							GetActiveScene() const;
 
-		void PushAppState(Ref<AppState> appState);
-		void PushScene();
+		void		PushAppState(Ref<AppState> appState);
+		Ref<Scene>  PushScene();
 
 		static EmbersEngine& GetInstance() {
 			static EmbersEngine instance;

@@ -31,7 +31,7 @@ namespace Core::System {
 			auto& cTransform = view.get<Component::Transform>(entity);			
 
 			for (auto& mesh : cModel.Meshes) {
-				cModel.Material.Apply(Gfx()->GetPipeline()->State(), cTransform.Matrix(), mesh.Properties());
+				cModel.Material.Apply(cTransform.Matrix(), mesh.Properties());
 				Gfx()->RenderMesh(mesh);
 			}
 		}

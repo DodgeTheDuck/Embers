@@ -35,7 +35,7 @@ namespace Core::System {
 			registry->patch<Component::Transform>(entity, [dt, cCamera, front, right](Component::Transform& cTransform) {
 
 				float walkSpeed = 1.0 * dt;
-				float sprintSpeed = 3.0 * dt;
+				float sprintSpeed = 10.0 * dt;
 				float actualSpeed = walkSpeed;
 
 				if (Keyboard()->GetKeyState(Input::Key::Shift)) {
@@ -92,13 +92,12 @@ namespace Core::System {
 		auto view = registry->view<Component::Camera, Component::Transform>();
 
 		for (auto& entity : view) {
-
 			auto& cCamera = registry->get<Component::Camera>(entity);
 			auto& cTransform = registry->get<Component::Transform>(entity);
-			Gfx()->GetPipeline()->State()->SetProjectMatrix(cCamera.projection);
-			Gfx()->GetPipeline()->State()->SetViewMatrix(cCamera.view);
-			Gfx()->GetPipeline()->State()->SetCameraPosition(cTransform.position);
-
+			auto& state = Gfx()->GetPipeline()->State();
+			state.SetProjectMatrix(cCamera.projection);
+			state.SetViewMatrix(cCamera.view);
+			state.SetCameraPosition(cTransform.position);
 		}
 
 	}

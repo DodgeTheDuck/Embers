@@ -15,7 +15,7 @@ namespace Core {
 
 		// setup window
 		_window = Window();
-		_window.Create(hInstance, 1024, 768, L"Ember Engine", L"emb_eng_win");
+		_window.Create(hInstance, 1920, 1080, L"Ember Engine", L"emb_eng_win");
 		_window.Show();
 
 		// setup gfx
@@ -31,17 +31,25 @@ namespace Core {
 
 		// setup assets
 		_assetManager = CreateRef<AssetManager>();
+
+		_assetManager->AddAsset<AssetTexture>("texture_height_map", std::make_shared<AssetTexture>("height_map.png"));
+		_assetManager->AddAsset<AssetTexture>("texture_grass", std::make_shared<AssetTexture>("grass.jpg"));
+		_assetManager->AddAsset<AssetTexture>("texture_stone", std::make_shared<AssetTexture>("stone.jpg"));
+
 		_assetManager->AddAsset<AssetShader>("shader_model", std::make_shared<AssetShader>("model.vert", "model.frag"));
+		_assetManager->AddAsset<AssetShader>("shader_terrain", std::make_shared<AssetShader>("terrain.vert", "terrain.geom", "terrain.frag"));
+		_assetManager->AddAsset<AssetShader>("shader_sky", std::make_shared<AssetShader>("sky.vert", "sky.geom", "sky.frag"));
 		_assetManager->AddAsset<AssetShader>("shader_particle_instanced", std::make_shared<AssetShader>("particle_instanced.vert", "particle_instanced.frag"));
+
 		_assetManager->AddAsset<AssetMesh>("mesh_rect", CreateRef<AssetMesh>(
 			(Primitive&)Rectangle::Make(1.0f, 1.0f, glm::vec3(1.0f))
 		));
 
-		auto model = ModelLoader().Load("roman_armour/armour_hd.glb");
-		_assetManager->AddAsset<AssetModel>("model_armour", std::make_shared<AssetModel>(model->GetMeshes(), model->GetMaterial()));
+		/*auto model = ModelLoader().Load("roman_armour/armour_hd.glb");
+		_assetManager->AddAsset<AssetModel>("model_armour", std::make_shared<AssetModel>(model->GetMeshes(), model->GetMaterial()));*/
 
 		// add and initiate the client state
-		PushAppState(bootstrappingState);		
+		PushAppState(bootstrappingState);
 		
 		// init conductor last to start timing as close to main loop as possible
 		_conductor.Init();
@@ -90,8 +98,10 @@ namespace Core {
 		appState->Init();
 	}
 
-	void EmbersEngine::PushScene() {
-		_scenes.push(CreateRef<Scene>());
+	Ref<Scene> EmbersEngine::PushScene() {
+		auto scene = CreateRef<Scene>();
+		_scenes.push(scene);
+		return scene;
 	}
 
 	void EmbersEngine::_Tick(double dt)

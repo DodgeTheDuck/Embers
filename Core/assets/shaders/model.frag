@@ -82,7 +82,7 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 void main()
 {
 
-    float exposure = 1.0;
+    float exposure = 0.8;
 
     vec3 lightPos = vec3(3, 3, 5);
     vec3 lightCol = vec3(1024, 1024, 1024);    

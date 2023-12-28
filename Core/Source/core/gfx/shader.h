@@ -6,6 +6,7 @@ namespace Core {
 		None = 0,
 		Vertex = 1,
 		Fragment = 2,
+		Geometry = 3,
 	};
 
 	class Shader {

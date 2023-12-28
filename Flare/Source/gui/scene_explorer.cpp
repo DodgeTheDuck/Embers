@@ -4,9 +4,23 @@
 
 namespace Flare::Gui {
 
+	SceneExplorer::SceneExplorer(Ref<Scene> scene) {
+		_scene = scene;
+		_selectedEntity = entt::null;
+	}
+
 	void SceneExplorer::Draw()
 	{
-		ImGui::Begin("Scene Explorer");
+
+		ImGui::SetNextWindowPos(ImVec2(0, 0));
+		ImGui::SetNextWindowSize(ImVec2(256, 1042));
+		
+		ImGui::Begin("Scene Explorer", nullptr, 
+			ImGuiWindowFlags_NoMove |
+			ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoFocusOnAppearing |
+			ImGuiWindowFlags_AlwaysVerticalScrollbar
+		);
 
 		auto registry = ACTIVE_SCENE()->GetRegistry();
 		auto view = registry->view<Component::Base>();
@@ -24,10 +38,21 @@ namespace Flare::Gui {
 		ImGui::End();
 	}
 
-	void Gui::SceneExplorer::_DrawNode(entt::entity entity, Component::Base& baseComponent)
+	entt::entity SceneExplorer::GetSelectedEntity() {
+		return _selectedEntity;
+	}
+
+	Ref<entt::registry> SceneExplorer::GetRegistry() {
+		return _scene->GetRegistry();
+	}
+
+	void SceneExplorer::_DrawNode(entt::entity entity, Component::Base& baseComponent)
 	{
 		if (entity == entt::null) return;
 		if (ImGui::TreeNode(baseComponent.name.c_str())) {
+			if (ImGui::IsItemClicked()) {
+				_selectedEntity = entity;
+			}
 			if (baseComponent.first != entt::null) {
 				auto registry = ACTIVE_SCENE()->GetRegistry();
 				_DrawNode(baseComponent.first, registry->get<Component::Base>(baseComponent.first));

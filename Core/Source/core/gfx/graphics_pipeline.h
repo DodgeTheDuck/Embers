@@ -23,7 +23,7 @@ namespace Core {
 
 		virtual void EndFrame() = 0;
 
-		Ref<GraphicsState> State();
+		GraphicsState& State();
 
 	protected:
 		Ref<GraphicsState> _state;

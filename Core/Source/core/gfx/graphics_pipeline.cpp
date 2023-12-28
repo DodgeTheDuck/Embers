@@ -41,9 +41,9 @@ namespace Core {
 	}
 
 
-	Ref<GraphicsState> GraphicsPipeline::State()
+	GraphicsState& GraphicsPipeline::State()
 	{
-		return _state;
+		return *_state;
 	}
 
 }

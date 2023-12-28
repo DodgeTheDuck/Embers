@@ -54,6 +54,12 @@ namespace Core {
 		glBindTexture(GL_TEXTURE_2D, _texture);
 	}
 
+	void Texture::Bind(int index)
+	{
+		glActiveTexture(GL_TEXTURE0 + index);
+		glBindTexture(GL_TEXTURE_2D, _texture);
+	}
+
 	void Texture::Unbind()
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);

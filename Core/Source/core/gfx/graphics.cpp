@@ -32,16 +32,21 @@ namespace Core {
 		return _batches[handle]->InstanceCount();
 	}
 
+	void Graphics::DepthRange(double viewNear, double viewFar)
+	{
+		glDepthRange(viewNear, viewFar);
+	}
+
 	void Graphics::BeginFrame() {
 		if (_pipeline != nullptr) {
 			_pipeline->BeginFrame();
 		}
 	}
 
-	void Graphics::RenderMesh(Mesh mesh)
+	void Graphics::RenderMesh(Mesh& mesh, RenderStyle style)
 	{
-		mesh.Bind();
-		glDrawElements(GL_TRIANGLES, mesh.IndexCount(), GL_UNSIGNED_INT, (void*)0);
+		mesh.Bind();		
+		glDrawElements(style, mesh.IndexCount(), GL_UNSIGNED_INT, (void*)0);
 	}
 
 	void Graphics::EndFrame() {

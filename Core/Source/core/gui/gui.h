@@ -9,7 +9,7 @@ namespace Core::Gui {
 
 	public:
 		void Init(HWND hwnd);
-		void AddWidget(Ref<Widget> widget);
+		Ref<Widget> AddWidget(Ref<Widget> widget);
 		void Begin();
 		void DrawWidgets();
 		void End();
